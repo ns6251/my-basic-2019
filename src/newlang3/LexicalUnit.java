@@ -32,77 +32,8 @@ public class LexicalUnit {
             return "DOUBLEVAL:\t" + value.getSValue();
         case INTVAL:
             return "INTVAL:\t" + value.getSValue();
-        case IF:
-            return ("IF");
-        case THEN:
-            return ("THEN");
-        case ELSE:
-            return ("ELSE");
-        case FOR:
-            return ("FOR");
-        case FORALL:
-            return ("FORALL");
-        case NEXT:
-            return ("NEXT");
-        case SUB:
-            return ("SUB");
-        case DIM:
-            return ("DIM");
-        case AS:
-            return ("AS");
-        case END:
-            return ("END");
-        case EOF:
-            return ("EOF");
-        case NL:
-            return ("NL");
-        case EQ:
-            return ("EQ");
-        case LT:
-            return ("LT");
-        case GT:
-            return ("GT");
-        case LE:
-            return ("LE");
-        case GE:
-            return ("GE");
-        case DO:
-            return ("DO");
-        case DOT:
-            return ("DOT");
-        case WHILE:
-            return ("WHILE");
-        case UNTIL:
-            return ("UNTIL");
-        case ADD:
-            return ("ADD");
-        case MUL:
-            return ("MUL");
-        case DIV:
-            return ("DIV");
-        case LP:
-            return ("LP");
-        case RP:
-            return ("RP");
-        case COMMA:
-            return ("COMMA");
-        case LOOP:
-            return ("LOOP");
-        case TO:
-            return ("TO");
-        case WEND:
-            return ("WEND");
-        case ELSEIF:
-            return ("ELSEIF");
-        case NE:
-            return ("NE");
-        case ENDIF:
-            return ("ENDIF");
-        case FUNC:
-            return ("FUNC");
         default:
-            break;
+            return type.toString();
         }
-        return "";
     }
 }
