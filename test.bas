@@ -1,11 +1,5 @@
-a = 5
+DIM i
 
-DO UNTIL a < 1
-
-PRINT ("Hello")
-
-a = a – 1
-
-LOOP
-
-END
+FOR i = 1 TO 100
+	PRINT "Hello World"
+NEXT i

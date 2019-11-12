@@ -27,7 +27,7 @@ public class ValueImpl extends Value {
 
     public ValueImpl(String s) {
         super(s);
-        // TODO 自動生成されたコンストラクター・スタブ
+        this.val = s;
     }
 
     @Override
@@ -38,8 +38,7 @@ public class ValueImpl extends Value {
 
     @Override
     public String getSValue() {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
+        return this.val;
     }
 
     @Override
