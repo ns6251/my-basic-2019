@@ -178,6 +178,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
             }
             target += n;
             if (target.matches(REG_LITERAL)) {
+                target = target.substring(1, target.length() - 1);
                 return new LexicalUnit(LexicalType.LITERAL, new ValueImpl(target, ValueType.STRING));
             }
         }
