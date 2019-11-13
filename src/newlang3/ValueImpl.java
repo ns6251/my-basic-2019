@@ -1,10 +1,33 @@
 package newlang3;
 
 public class ValueImpl extends Value {
+    String val;
+    ValueType type;
 
     public ValueImpl(String s, ValueType t) {
         super(s, t);
+        this.val = s;
+        this.type = t;
+    }
+
+    public ValueImpl(boolean b) {
+        super(b);
         // TODO 自動生成されたコンストラクター・スタブ
+    }
+
+    public ValueImpl(double d) {
+        super(d);
+        // TODO 自動生成されたコンストラクター・スタブ
+    }
+
+    public ValueImpl(int i) {
+        super(i);
+        // TODO 自動生成されたコンストラクター・スタブ
+    }
+
+    public ValueImpl(String s) {
+        super(s);
+        this.val = s;
     }
 
     @Override
@@ -15,8 +38,7 @@ public class ValueImpl extends Value {
 
     @Override
     public String getSValue() {
-        // TODO 自動生成されたメソッド・スタブ
-        return null;
+        return this.val;
     }
 
     @Override
