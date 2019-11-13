@@ -60,16 +60,12 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
         special.put("\r\n", new LexicalUnit(LexicalType.NL));
     }
 
-    public LexicalAnalyzerImpl(String fname) {
-        try {
-            reader = new PushbackReader(new FileReader(fname));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public LexicalAnalyzerImpl(String fname) throws FileNotFoundException {
+        reader = new PushbackReader(new FileReader(fname));
     }
 
     @Override
-    public LexicalUnit get() {
+    public LexicalUnit get() throws IOException {
         int c = skipBlank();
         if (c == -1 || next == -1) {
             return new LexicalUnit(LexicalType.EOF);
@@ -93,40 +89,23 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
         }
     }
 
-    private LexicalUnit getSpecial(String target) {
-        try {
-            next = reader.read();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private LexicalUnit getSpecial(String target) throws IOException {
+        next = reader.read();
         String n = String.valueOf((char) next);
         if (special.get(target + n) == null) {
-            try {
-                reader.unread(next);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            reader.unread(next);
         }
         return new LexicalUnit(LexicalType.NL);
     }
 
-    private LexicalUnit getName(String target) {
+    private LexicalUnit getName(String target) throws IOException {
         while (true) {
-            try {
-                next = reader.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            next = reader.read();
             String n = String.valueOf((char) next);
             if ((target + n).matches(REG_NAME)) {
                 target += n;
             } else {
-                try {
-                    reader.unread(next);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                reader.unread(next);
                 break;
             }
         }
@@ -137,22 +116,14 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
         return lu;
     }
 
-    private LexicalUnit getNumber(String target) {
+    private LexicalUnit getNumber(String target) throws IOException {
         while (true) {
-            try {
-                next = reader.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            next = reader.read();
             String n = String.valueOf((char) next);
             if ((target + n).matches(REG_NUMBER)) {
                 target += n;
             } else {
-                try {
-                    reader.unread(next);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                reader.unread(next);
                 break;
             }
         }
@@ -163,13 +134,9 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
         }
     }
 
-    private LexicalUnit getLiteral(String target) {
+    private LexicalUnit getLiteral(String target) throws IOException {
         while (true) {
-            try {
-                next = reader.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            next = reader.read();
             String n = String.valueOf((char) next);
             if (next == -1 || special.containsKey(n)) {
                 System.err.println("字句解析エラー: ... \"" + target + "\"");
@@ -184,22 +151,14 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
         }
     }
 
-    private LexicalUnit getOperator(String target) {
+    private LexicalUnit getOperator(String target) throws IOException {
         while (true) {
-            try {
-                next = reader.read();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            next = reader.read();
             String n = String.valueOf((char) next);
             if (operator.containsKey(target + n)) {
                 target += n;
             } else {
-                try {
-                    reader.unread(next);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                reader.unread(next);
                 return operator.get(target);
             }
         }

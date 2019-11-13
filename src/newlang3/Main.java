@@ -1,5 +1,7 @@
 package newlang3;
 
+import java.io.FileNotFoundException;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -7,7 +9,12 @@ public class Main {
         if (args.length > 0) {
             fname = args[0];
         }
-        LexicalAnalyzer la = new LexicalAnalyzerImpl(fname);
+        LexicalAnalyzer la = null;
+        try {
+            la = new LexicalAnalyzerImpl(fname);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         while (true) {
             LexicalUnit lu = null;
             try {
