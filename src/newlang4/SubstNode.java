@@ -15,11 +15,11 @@ public class SubstNode extends Node {
     super.env = env;
   }
 
-  public static Node isMatch(Environment env, LexicalUnit first) {
-    return null;
-  }
-
   public static Set<LexicalType> getFirstSet() {
     return firstSet;
+  }
+
+  public static Node isMatch(Environment env, LexicalUnit first) {
+    return null;
   }
 }

@@ -4,22 +4,21 @@ public class Node {
   NodeType type;
   Environment env;
 
-  /** Creates a new instance of Node */
   public Node() {}
 
-  public Node(NodeType my_type) {
-    type = my_type;
+  public Node(NodeType type) {
+    this.type = type;
   }
 
-  public Node(Environment my_env) {
-    env = my_env;
+  public Node(Environment env) {
+    this.env = env;
   }
 
   public NodeType getType() {
     return type;
   }
 
-  public boolean Parse() throws Exception {
+  public boolean parse() throws Exception {
     return true;
   }
 

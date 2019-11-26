@@ -31,18 +31,18 @@ public class StmtNode extends Node {
   }
 
   @Override
-  public boolean Parse() throws Exception {
+  public boolean parse() throws Exception {
     LexicalUnit lu = env.getInput().get();
     env.getInput().unget(lu);
 
     body = SubstNode.isMatch(env, lu);
     if (body != null) {
-      return body.Parse();
+      return body.parse();
     }
 
     body = CallSubNode.isMatch(env, lu);
     if (body != null) {
-      return body.Parse();
+      return body.parse();
     }
 
     if (lu.getType() == LexicalType.END) {

@@ -3,7 +3,7 @@ package newlang4;
 public class Main {
 
   public static void main(String[] args) throws Exception {
-    for (LexicalType lt : StmtNode.getFirstSet()) {
+    for (LexicalType lt : CondNode.getFirstSet()) {
       System.out.println(lt.toString());
     }
     String fname = "test.bas";
@@ -15,7 +15,7 @@ public class Main {
     Environment env = new Environment(lex);
     System.out.println("basic parser");
     Node program = ProgramNode.isMatch(env, first);
-    if (program != null && program.Parse()) {
+    if (program != null && program.parse()) {
       System.out.println(program);
       System.out.println("value = " + program.getValue());
     } else {

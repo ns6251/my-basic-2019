@@ -7,11 +7,11 @@ public class CallSubNode extends Node {
   Node body;
   private static Set<LexicalType> firstSet = new HashSet<LexicalType>();
 
-  public static Node isMatch(Environment env, LexicalUnit first) {
-    return null;
-  }
-
   public static Set<LexicalType> getFirstSet() {
     return firstSet;
+  }
+
+  public static Node isMatch(Environment env, LexicalUnit first) {
+    return null;
   }
 }

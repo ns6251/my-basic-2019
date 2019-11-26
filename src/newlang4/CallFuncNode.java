@@ -14,4 +14,8 @@ public class CallFuncNode extends Node {
   public static Set<LexicalType> getFirstSet() {
     return firstSet;
   }
+
+  public static Node isMatch(Environment env, LexicalUnit first) {
+    return null;
+  }
 }

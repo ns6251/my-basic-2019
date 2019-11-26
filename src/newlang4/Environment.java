@@ -12,6 +12,10 @@ public class Environment {
   }
 
   public LexicalAnalyzer getInput() {
-    return input;
+    return this.input;
+  }
+
+  public Variable getVariable(String s) {
+    return null;
   }
 }
