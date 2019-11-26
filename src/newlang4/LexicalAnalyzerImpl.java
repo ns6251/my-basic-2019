@@ -11,7 +11,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
   private PushbackReader reader;
   private static int next;
   private static final String REG_LITERAL = "^\".*\"$";
-  private static final String REG_NUMBER = "^[0-9]+\\.?[0-9]*$";
+  private static final String REG_NUMBER = "^[0-9]+(\\.?[0-9]*)*$";
   private static final String REG_INTVAL = "^[0-9]+$";
   private static final String REG_NAME = "^[a-zA-Z_][a-zA-Z0-9_]*$";
   private static final String REG_BLANK = "^[ \t]+$";
@@ -53,8 +53,8 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     operator.put("-", new LexicalUnit(LexicalType.SUB));
     operator.put("*", new LexicalUnit(LexicalType.MUL));
     operator.put("/", new LexicalUnit(LexicalType.DIV));
-    operator.put(")", new LexicalUnit(LexicalType.LP));
-    operator.put("(", new LexicalUnit(LexicalType.RP));
+    operator.put("(", new LexicalUnit(LexicalType.LP));
+    operator.put(")", new LexicalUnit(LexicalType.RP));
     operator.put(",", new LexicalUnit(LexicalType.COMMA));
     special.put("\n", new LexicalUnit(LexicalType.NL));
     special.put("\r", new LexicalUnit(LexicalType.NL));
@@ -81,16 +81,16 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     } else if (target.matches(REG_NAME)) {
       return getName(target);
     } else if (special.containsKey(target)) {
-      return getSpecial(target);
+      return getNewline(target);
     } else {
-      System.err.println("字句解析エラー！");
+      System.err.println("字句解析エラー");
       System.err.println("What is \"" + (char) c + "\" ?");
       System.exit(1);
       return null;
     }
   }
 
-  private LexicalUnit getSpecial(String target) throws IOException {
+  private LexicalUnit getNewline(String target) throws IOException {
     next = reader.read();
     String n = String.valueOf((char) next);
     if (special.get(target + n) == null) {
@@ -165,26 +165,19 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     }
   }
 
-  private int skipBlank() {
+  private int skipBlank() throws IOException {
     int c;
-    try {
-      do {
-        c = reader.read();
-      } while (String.valueOf((char) c).matches(REG_BLANK));
-      return c;
-    } catch (Exception e) {
-      return -1;
-    }
+    do {
+      c = reader.read();
+    } while (String.valueOf((char) c).matches(REG_BLANK));
+    return c;
   }
 
   @Override
   public boolean expect(LexicalType type) throws Exception {
-    // TODO 自動生成されたメソッド・スタブ
     return false;
   }
 
   @Override
-  public void unget(LexicalUnit token) throws Exception {
-    // TODO 自動生成されたメソッド・スタブ
-  }
+  public void unget(LexicalUnit token) throws Exception {}
 }
