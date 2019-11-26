@@ -1,29 +1,25 @@
 package newlang4;
 
-import java.io.FileInputStream;
-
-import newlang3.LexicalAnalyzerImpl;
-
 public class Main {
 
-  /** @param args */
   public static void main(String[] args) throws Exception {
-    FileInputStream fin = null;
-    LexicalAnalyzer lex;
-    LexicalUnit first;
-    Environment env;
-    Node program;
-
+    for (LexicalType lt : StmtNode.getFirstSet()) {
+      System.out.println(lt.toString());
+    }
+    String fname = "test.bas";
+    if (args.length > 0) {
+      fname = args[0];
+    }
+    LexicalAnalyzer lex = new LexicalAnalyzerImpl(fname);
+    LexicalUnit first = lex.get();
+    Environment env = new Environment(lex);
     System.out.println("basic parser");
-    fin = new FileInputStream("test.txt");
-    lex = new LexicalAnalyzerImpl(fin);
-    env = new Environment(lex);
-    first = lex.get();
-
-    program = ProgramNode.isMatch(env, first);
+    Node program = ProgramNode.isMatch(env, first);
     if (program != null && program.Parse()) {
       System.out.println(program);
       System.out.println("value = " + program.getValue());
-    } else System.out.println("syntax error");
+    } else {
+      System.out.println("syntax error");
+    }
   }
 }

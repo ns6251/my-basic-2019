@@ -6,9 +6,9 @@ public class Environment {
   LexicalAnalyzer input;
   Hashtable var_table;
 
-  public Environment(LexicalAnalyzer my_input) {
-    input = my_input;
-    var_table = new Hashtable();
+  public Environment(LexicalAnalyzer input) {
+    this.input = input;
+    this.var_table = new Hashtable();
   }
 
   public LexicalAnalyzer getInput() {
