@@ -9,7 +9,8 @@ public class ValueImpl extends Value {
     this.type = t;
   }
 
-  public ValueImpl(boolean b) {}
+  public ValueImpl(boolean b) {
+  }
 
   public ValueImpl(double d) {}
 
@@ -17,6 +18,7 @@ public class ValueImpl extends Value {
 
   public ValueImpl(String s) {
     this.val = s;
+    this.type = ValueType.STRING;
   }
 
   @Override

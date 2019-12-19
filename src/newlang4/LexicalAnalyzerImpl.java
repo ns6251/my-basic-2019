@@ -1,15 +1,18 @@
 package newlang4;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PushbackReader;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LexicalAnalyzerImpl implements LexicalAnalyzer {
   private PushbackReader reader;
-  private static int next;
+  private Deque<LexicalUnit> ungetStack = new ArrayDeque<LexicalUnit>();
   private static final String REG_LITERAL = "^\".*\"$";
   private static final String REG_NUMBER = "^[0-9]+(\\.?[0-9]*)*$";
   private static final String REG_INTVAL = "^[0-9]+$";
@@ -33,7 +36,6 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     reserved.put("DIM", new LexicalUnit(LexicalType.DIM));
     reserved.put("AS", new LexicalUnit(LexicalType.AS));
     reserved.put("END", new LexicalUnit(LexicalType.END));
-    reserved.put("DOT", new LexicalUnit(LexicalType.DOT));
     reserved.put("WHILE", new LexicalUnit(LexicalType.WHILE));
     reserved.put("DO", new LexicalUnit(LexicalType.DO));
     reserved.put("UNTIL", new LexicalUnit(LexicalType.UNTIL));
@@ -41,6 +43,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     reserved.put("TO", new LexicalUnit(LexicalType.TO));
     reserved.put("WEND", new LexicalUnit(LexicalType.WEND));
     reserved.put("IF", new LexicalUnit(LexicalType.IF));
+    operator.put(".", new LexicalUnit(LexicalType.DOT));
     operator.put("=", new LexicalUnit(LexicalType.EQ));
     operator.put("<", new LexicalUnit(LexicalType.LT));
     operator.put(">", new LexicalUnit(LexicalType.GT));
@@ -61,14 +64,17 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     special.put("\r\n", new LexicalUnit(LexicalType.NL));
   }
 
-  public LexicalAnalyzerImpl(String fname) throws FileNotFoundException {
-    reader = new PushbackReader(new FileReader(fname));
+  public LexicalAnalyzerImpl(File file) throws FileNotFoundException {
+    reader = new PushbackReader(new FileReader(file));
   }
 
   @Override
   public LexicalUnit get() throws IOException {
+    if (!ungetStack.isEmpty()) {
+      return ungetStack.pop();
+    }
     int c = skipBlank();
-    if (c == -1 || next == -1) {
+    if (c == -1) {
       return new LexicalUnit(LexicalType.EOF);
     }
     String target = String.valueOf((char) c);
@@ -90,10 +96,26 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     }
   }
 
+  public LexicalUnit peek() throws Exception {
+    LexicalUnit lu = get();
+    unget(lu);
+    return lu;
+  }
+
+  @Override
+  public boolean expect(LexicalType type) throws Exception {
+    return peek().getType() == type;
+  }
+
+  @Override
+  public void unget(LexicalUnit token) throws Exception {
+    ungetStack.push(token);
+  }
+
   private LexicalUnit getNewline(String target) throws IOException {
-    next = reader.read();
+    int next = reader.read();
     String n = String.valueOf((char) next);
-    if (special.get(target + n) == null) {
+    if (special.get(target + n) == null && next != -1) {
       reader.unread(next);
     }
     return new LexicalUnit(LexicalType.NL);
@@ -101,11 +123,11 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
   private LexicalUnit getName(String target) throws IOException {
     while (true) {
-      next = reader.read();
+      int next = reader.read();
       String n = String.valueOf((char) next);
       if ((target + n).matches(REG_NAME)) {
         target += n;
-      } else {
+      } else if (next != -1) {
         reader.unread(next);
         break;
       }
@@ -119,11 +141,11 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
   private LexicalUnit getNumber(String target) throws IOException {
     while (true) {
-      next = reader.read();
+      int next = reader.read();
       String n = String.valueOf((char) next);
       if ((target + n).matches(REG_NUMBER)) {
         target += n;
-      } else {
+      } else if (next != -1) {
         reader.unread(next);
         break;
       }
@@ -137,7 +159,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
   private LexicalUnit getLiteral(String target) throws IOException {
     while (true) {
-      next = reader.read();
+      int next = reader.read();
       String n = String.valueOf((char) next);
       if (next == -1 || special.containsKey(n)) {
         System.err.println("字句解析エラー: ... \"" + target + "\"");
@@ -154,11 +176,11 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
 
   private LexicalUnit getOperator(String target) throws IOException {
     while (true) {
-      next = reader.read();
+      int next = reader.read();
       String n = String.valueOf((char) next);
       if (operator.containsKey(target + n)) {
         target += n;
-      } else {
+      } else if (next != 1) {
         reader.unread(next);
         return operator.get(target);
       }
@@ -172,12 +194,4 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     } while (String.valueOf((char) c).matches(REG_BLANK));
     return c;
   }
-
-  @Override
-  public boolean expect(LexicalType type) throws Exception {
-    return false;
-  }
-
-  @Override
-  public void unget(LexicalUnit token) throws Exception {}
 }

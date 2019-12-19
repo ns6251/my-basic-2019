@@ -1,22 +1,14 @@
 package newlang4;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 public class SubstNode extends Node {
   Node body;
-  private static Set<LexicalType> firstSet = new HashSet<LexicalType>();
-
-  static {
-    firstSet.addAll(LeftvarNode.getFirstSet());
-  }
+  private static Set<LexicalType> firstSet = EnumSet.of(LexicalType.NAME);
 
   private SubstNode(Environment env) {
     super.env = env;
-  }
-
-  public static Set<LexicalType> getFirstSet() {
-    return firstSet;
   }
 
   public static Node isMatch(Environment env, LexicalUnit first) {

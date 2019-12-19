@@ -17,6 +17,7 @@ public class ValueImpl extends Value {
 
   public ValueImpl(String s) {
     this.val = s;
+    this.type = ValueType.STRING;
   }
 
   @Override

@@ -1,33 +1,23 @@
 package newlang4;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 public class StmtNode extends Node {
   Node body;
-  private static Set<LexicalType> firstSet = new HashSet<LexicalType>();
-
-  static {
-    firstSet.addAll(SubstNode.getFirstSet());
-    firstSet.addAll(CallSubNode.getFirstSet());
-    firstSet.add(LexicalType.FOR);
-    firstSet.add(LexicalType.END);
-  }
+  private static Set<LexicalType> firstSet = EnumSet.of(LexicalType.FOR, LexicalType.END);
 
   private StmtNode(Environment env) {
     super.env = env;
     super.type = NodeType.STMT;
   }
 
-  public static Node isMatch(Environment env, LexicalUnit first) {
-    if (!firstSet.contains(first.type)) {
-      return null;
-    }
-    return new StmtNode(env);
+  public static boolean isFirst(LexicalUnit lu) {
+    return firstSet.contains(lu.getType());
   }
 
-  public static Set<LexicalType> getFirstSet() {
-    return firstSet;
+  public static Node getHandler(LexicalUnit first, Environment env) {
+    return new StmtNode(env);
   }
 
   @Override
