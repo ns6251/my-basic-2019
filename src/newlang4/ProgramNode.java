@@ -4,24 +4,19 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class ProgramNode extends Node {
-  private Node body;
-  private static Set<LexicalType> firstSet =
+  private Node child;
+  private static final Set<LexicalType> firstSet =
       EnumSet.of(
           LexicalType.NAME,
           LexicalType.IF,
           LexicalType.DO,
           LexicalType.WHILE,
           LexicalType.FOR,
-          LexicalType.FORALL,
-          LexicalType.INTVAL,
-          LexicalType.DOUBLEVAL,
-          LexicalType.BOOLVAL,
-          LexicalType.LITERAL,
-          LexicalType.END);
+          LexicalType.END,
+          LexicalType.NL);
 
   private ProgramNode(Environment env) {
-    super.env = env;
-    super.type = NodeType.PROGRAM;
+    super(NodeType.PROGRAM, env);
   }
 
   public static boolean isFirst(LexicalUnit lu) {
@@ -36,8 +31,19 @@ public class ProgramNode extends Node {
   public boolean parse() throws Exception {
     LexicalUnit first = this.env.getInput().peek();
     if (StmtListNode.isFirst(first)) {
-      this.body = StmtListNode.getHandler(first, this.env);
+      this.child = StmtListNode.getHandler(first, this.env);
+      return this.child.parse();
     }
     return false;
+  }
+
+  @Override
+  public String toString() {
+    return "program(" + child.toString() + ")";
+  }
+
+  @Override
+  public Value getValue() throws Exception {
+    return child.getValue();
   }
 }

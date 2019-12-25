@@ -47,6 +47,6 @@ public class ValueImpl extends Value {
 
   @Override
   public ValueType getType() {
-    return null;
+    return this.type;
   }
 }

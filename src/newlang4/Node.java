@@ -14,6 +14,11 @@ public class Node {
     this.env = env;
   }
 
+  public Node(NodeType type, Environment env) {
+    this.type = type;
+    this.env = env;
+  }
+
   public NodeType getType() {
     return type;
   }
@@ -27,7 +32,7 @@ public class Node {
   }
 
   public String toString() {
-    if (type == NodeType.END) return "END";
+    if (this.type == NodeType.END) return "END";
     else return "Node";
   }
 }

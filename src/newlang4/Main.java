@@ -12,21 +12,20 @@ public class Main {
     try {
       File sourceFile = new File(fname);
       LexicalAnalyzer lex = new LexicalAnalyzerImpl(sourceFile);
-      LexicalUnit first = lex.get();
-      lex.unget(first);
       Environment env = new Environment(lex);
+      LexicalUnit first = env.getInput().peek();
+
       System.out.println("basic parser");
       if (ProgramNode.isFirst(first)) {
         Node program = ProgramNode.getHandler(first, env);
         if (program != null && program.parse()) {
-          System.out.println(program);
-          System.out.println("value = " + program.getValue());
+          System.out.println("value = " + program.toString());
         }
       } else {
-        System.out.println("syntax error");
+        System.err.println("syntax error");
       }
     } catch (Exception e) {
-      System.out.println("execution error");
+      System.err.println("execution error");
     }
   }
 }

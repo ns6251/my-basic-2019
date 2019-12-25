@@ -4,8 +4,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class StmtNode extends Node {
-  Node body;
-  private static Set<LexicalType> firstSet = EnumSet.of(LexicalType.FOR, LexicalType.END);
+  private Node child;
+  private static final Set<LexicalType> firstSet = EnumSet.of(LexicalType.FOR, LexicalType.END);
 
   private StmtNode(Environment env) {
     super.env = env;
@@ -22,24 +22,17 @@ public class StmtNode extends Node {
 
   @Override
   public boolean parse() throws Exception {
-    LexicalUnit lu = env.getInput().get();
-    env.getInput().unget(lu);
-
-    body = SubstNode.isMatch(env, lu);
-    if (body != null) {
-      return body.parse();
-    }
-
-    body = CallSubNode.isMatch(env, lu);
-    if (body != null) {
-      return body.parse();
-    }
-
-    if (lu.getType() == LexicalType.END) {
-      super.type = NodeType.END;
+    LexicalUnit lu = env.getInput().peek();
+    if (EndNode.isFirst(lu)) {
+      env.getInput().get();
+      child = EndNode.getHandler(lu, env);
       return true;
     }
-
     return false;
+  }
+
+  @Override
+  public String toString() {
+    return "stmt(" + child.toString() + ")";
   }
 }
