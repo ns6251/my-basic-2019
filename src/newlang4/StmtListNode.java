@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class StmtListNode extends Node {
   private List<Node> children = new ArrayList<Node>();
-  private static final Set<LexicalType> firstSet =
+  private static final Set<LexicalType> FIRST_SET =
       EnumSet.of(
           LexicalType.NAME,
           LexicalType.IF,
@@ -22,7 +22,7 @@ public class StmtListNode extends Node {
   }
 
   public static boolean isFirst(LexicalUnit first) {
-    return firstSet.contains(first.getType());
+    return FIRST_SET.contains(first.getType());
   }
 
   public static Node getHandler(LexicalUnit first, Environment env) {

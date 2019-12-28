@@ -4,14 +4,14 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public class EndNode extends Node {
-  private static final Set<LexicalType> firstSet = EnumSet.of(LexicalType.END);
+  private static final Set<LexicalType> FIRST_SET = EnumSet.of(LexicalType.END);
 
   private EndNode(Environment env) {
     super(NodeType.END, env);
   }
 
   public static boolean isFirst(LexicalUnit lu) {
-    return firstSet.contains(lu.getType());
+    return FIRST_SET.contains(lu.getType());
   }
 
   public static Node getHandler(LexicalUnit first, Environment env) {

@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class StmtNode extends Node {
   private Node child;
-  private static final Set<LexicalType> firstSet = EnumSet.of(LexicalType.FOR, LexicalType.END);
+  private static final Set<LexicalType> FIRST_SET = EnumSet.of(LexicalType.FOR, LexicalType.END);
 
   private StmtNode(Environment env) {
     super.env = env;
@@ -13,7 +13,7 @@ public class StmtNode extends Node {
   }
 
   public static boolean isFirst(LexicalUnit lu) {
-    return firstSet.contains(lu.getType());
+    return FIRST_SET.contains(lu.getType());
   }
 
   public static Node getHandler(LexicalUnit first, Environment env) {

@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class ProgramNode extends Node {
   private Node child;
-  private static final Set<LexicalType> firstSet =
+  private static final Set<LexicalType> FIRST_SET =
       EnumSet.of(
           LexicalType.NAME,
           LexicalType.IF,
@@ -20,7 +20,7 @@ public class ProgramNode extends Node {
   }
 
   public static boolean isFirst(LexicalUnit lu) {
-    return firstSet.contains(lu.getType());
+    return FIRST_SET.contains(lu.getType());
   }
 
   public static Node getHandler(LexicalUnit first, Environment env) {
