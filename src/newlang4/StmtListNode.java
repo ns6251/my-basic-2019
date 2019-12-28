@@ -25,7 +25,7 @@ public class StmtListNode extends Node {
     return FIRST_SET.contains(first.getType());
   }
 
-  public static Node getHandler(LexicalUnit first, Environment env) {
+  public static Node getHandler(Environment env) {
     return new StmtListNode(env);
   }
 
@@ -38,8 +38,8 @@ public class StmtListNode extends Node {
       }
       LexicalUnit first = env.getInput().peek();
       if (StmtNode.isFirst(first)) {
-        child = StmtNode.getHandler(first, env);
-        children.add(child);
+        child = StmtNode.getHandler(env);
+        this.children.add(child);
         if (!child.parse()) {
           return false;
         }

@@ -17,7 +17,7 @@ public class Main {
 
       System.out.println("basic parser");
       if (ProgramNode.isFirst(first)) {
-        Node program = ProgramNode.getHandler(first, env);
+        Node program = ProgramNode.getHandler(env);
         if (program != null && program.parse()) {
           System.out.println("value = " + program.toString());
         }

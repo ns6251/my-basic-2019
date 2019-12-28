@@ -8,15 +8,14 @@ public class StmtNode extends Node {
   private static final Set<LexicalType> FIRST_SET = EnumSet.of(LexicalType.FOR, LexicalType.END);
 
   private StmtNode(Environment env) {
-    super.env = env;
-    super.type = NodeType.STMT;
+    super(NodeType.STMT, env);
   }
 
   public static boolean isFirst(LexicalUnit lu) {
     return FIRST_SET.contains(lu.getType());
   }
 
-  public static Node getHandler(LexicalUnit first, Environment env) {
+  public static Node getHandler(Environment env) {
     return new StmtNode(env);
   }
 
@@ -25,7 +24,7 @@ public class StmtNode extends Node {
     LexicalUnit lu = env.getInput().peek();
     if (EndNode.isFirst(lu)) {
       env.getInput().get();
-      child = EndNode.getHandler(lu, env);
+      child = EndNode.getHandler(env);
       return true;
     }
     return false;

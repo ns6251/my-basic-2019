@@ -23,7 +23,7 @@ public class ProgramNode extends Node {
     return FIRST_SET.contains(lu.getType());
   }
 
-  public static Node getHandler(LexicalUnit first, Environment env) {
+  public static Node getHandler(Environment env) {
     return new ProgramNode(env);
   }
 
@@ -31,7 +31,7 @@ public class ProgramNode extends Node {
   public boolean parse() throws Exception {
     LexicalUnit first = this.env.getInput().peek();
     if (StmtListNode.isFirst(first)) {
-      this.child = StmtListNode.getHandler(first, this.env);
+      this.child = StmtListNode.getHandler(this.env);
       return this.child.parse();
     }
     return false;
