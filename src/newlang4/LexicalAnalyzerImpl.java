@@ -103,6 +103,19 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
   }
 
   @Override
+  public LexicalUnit peek(int ahead) throws Exception {
+    Deque<LexicalUnit> stack = new ArrayDeque<LexicalUnit>();
+    for (int i = 0; i < ahead; i++) {
+      stack.push(get());
+    }
+    LexicalUnit lu = stack.peek();
+    while (!stack.isEmpty()) {
+      unget(stack.pop());
+    }
+    return lu;
+  }
+
+  @Override
   public boolean expect(LexicalType type) throws Exception {
     return peek().getType() == type;
   }

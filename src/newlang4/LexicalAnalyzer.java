@@ -8,4 +8,6 @@ public interface LexicalAnalyzer {
   public void unget(LexicalUnit token) throws Exception;
 
   public LexicalUnit peek() throws Exception;
+
+  public LexicalUnit peek(int ahead) throws Exception;
 }
