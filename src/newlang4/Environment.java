@@ -15,7 +15,7 @@ public class Environment {
     return this.input;
   }
 
-  public Variable getVariable(String s) {
+  public VariableNode getVariable(String s) {
     return null;
   }
 }
