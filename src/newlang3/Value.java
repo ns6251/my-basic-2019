@@ -1,35 +1,15 @@
 package newlang3;
 
 public abstract class Value {
-    // 実装すべきコンストラクタ
-    public Value(String s) {
-    };
+  public abstract String get_sValue();
 
-    public Value(int i) {
-    };
+  public abstract String getSValue();
 
-    public Value(double d) {
-    };
+  public abstract int getIValue();
 
-    public Value(boolean b) {
-    };
+  public abstract double getDValue();
 
-    public Value(String s, ValueType t) {
-    };
+  public abstract boolean getBValue();
 
-    public abstract String get_sValue();
-
-    public abstract String getSValue();
-
-    // ストリング型で値を取り出す。必要があれば、型変換を行う。
-    public abstract int getIValue();
-
-    // 整数型で値を取り出す。必要があれば、型変換を行う。
-    public abstract double getDValue();
-
-    // 小数点型で値を取り出す。必要があれば、型変換を行う。
-    public abstract boolean getBValue();
-
-    // 論理型で値を取り出す。必要があれば、型変換を行う。
-    public abstract ValueType getType();
+  public abstract ValueType getType();
 }

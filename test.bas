@@ -1,5 +1,5 @@
-DIM i
+END
+END
+END
+END
 
-FOR i = 1 TO 100
-	PRINT "Hello World"
-NEXT i
