@@ -13,23 +13,17 @@ public class VariableNode extends Node {
     this.name = lu.getValue().getSValue();
   }
 
-  public static boolean isMatch(LexicalType first) {
-    return (first == LexicalType.NAME);
+  public static boolean isFirst(LexicalUnit first) {
+    return (first.getType() == LexicalType.NAME);
   }
 
-  public static Node getHandler(LexicalType first, Environment my_env) {
-    if (first == LexicalType.NAME) {
-      VariableNode v;
-
-      try {
-        LexicalUnit lu = my_env.getInput().peek();
-        String s = lu.getValue().getSValue();
-        v = my_env.getVariable(s);
-        return v;
-      } catch (Exception e) {
-      }
+  public static Node getHandler(LexicalType first, Environment my_env) throws Exception {
+    if (first != LexicalType.NAME) {
+      throw new Exception("Invalid error in variablenode");
     }
-    return null;
+    LexicalUnit lu = my_env.getInput().get();
+    String s = lu.getValue().getSValue();
+    return my_env.getVariable(s);
   }
 
   public void setValue(Value v) {
@@ -41,6 +35,6 @@ public class VariableNode extends Node {
   }
 
   public String toString() {
-    return "NAME";
+    return this.name;
   }
 }

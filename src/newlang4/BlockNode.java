@@ -5,9 +5,9 @@ import java.util.Set;
 
 public class BlockNode extends Node {
   Node body;
-  private static Set<LexicalType> firstSet = EnumSet.of(LexicalType.WHILE, LexicalType.DO);
+  private static final Set<LexicalType> FIRST_SET = EnumSet.of(LexicalType.WHILE, LexicalType.DO);
 
-  public static Node isMatch(Environment env, LexicalUnit first) {
-    return null;
+  public static boolean isFirst(LexicalUnit first) {
+    return FIRST_SET.contains(first.getType());
   }
 }

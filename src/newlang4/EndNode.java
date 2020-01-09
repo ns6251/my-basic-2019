@@ -14,7 +14,8 @@ public class EndNode extends Node {
     return FIRST_SET.contains(lu.getType());
   }
 
-  public static Node getHandler(Environment env) {
+  public static Node getHandler(Environment env) throws Exception {
+    env.getInput().get();
     return new EndNode(env);
   }
 

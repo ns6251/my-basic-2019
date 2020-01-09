@@ -33,29 +33,26 @@ public class StmtListNode extends Node {
   public boolean parse() throws Exception {
     Node child;
     while (true) {
-      while (env.getInput().expect(LexicalType.NL)) {
-        env.getInput().get();
-      }
+      while (env.getInput().expect(LexicalType.NL)) env.getInput().get();
       LexicalUnit first = env.getInput().peek();
       if (StmtNode.isFirst(first)) {
         child = StmtNode.getHandler(env);
         this.children.add(child);
-        if (!child.parse()) {
-          return false;
-        }
-      } else {
-        return true;
+        child.parse();
+        continue;
       }
+      if (BlockNode.isFirst(first)) {}
+      return true;
     }
   }
 
   @Override
   public String toString() {
-    String str = "stmt_list(";
+    String str = "stmt_list(\n";
     for (Node child : children) {
-      str += child.toString() + ",";
+      str += child.toString() + ",\n";
     }
-    return str + ")";
+    return str.substring(0, str.length() - 2) + "\n)";
   }
 
   @Override
