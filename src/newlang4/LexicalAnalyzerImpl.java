@@ -122,6 +122,11 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
   }
 
   @Override
+  public boolean expect(int ahead, LexicalType type) throws Exception {
+    return peek(ahead).getType() == type;
+  }
+
+  @Override
   public void unget(LexicalUnit token) throws Exception {
     ungetStack.push(token);
   }
