@@ -44,12 +44,10 @@ public class ExprNode extends Node {
           LexicalType.LITERAL,
           LexicalType.FUNC);
 
+  private static final Set<LexicalType> UNARY_SET = EnumSet.of(LexicalType.SUB);
+
   private ExprNode(Environment env) {
     super(NodeType.EXPR, env);
-  }
-
-  public ExprNode(Node l, Node r, LexicalType o) {
-    super(NodeType.EXPR);
   }
 
   public static boolean isFirst(LexicalUnit lu) {
@@ -59,7 +57,7 @@ public class ExprNode extends Node {
   public static Node getHandler(Environment env) throws Exception {
     LexicalType first = env.getInput().peek().getType();
     LexicalType second = env.getInput().peek(2).getType();
-    if (first == LexicalType.SUB || first == LexicalType.LP || prededence.containsKey(second)) {
+    if (first == LexicalType.LP || UNARY_SET.contains(first) || prededence.containsKey(second)) {
       return new ExprNode(env);
     }
     if (first == LexicalType.NAME) {
@@ -73,7 +71,16 @@ public class ExprNode extends Node {
 
   @Override
   public boolean parse() throws Exception {
-    RPNize();
+    Deque<Object> currStack = new ArrayDeque<>();
+    boolean probUnary = true;
+    LexicalUnit lu = env.getInput().peek();
+    do {
+      probUnary = RPNize(currStack, probUnary, lu);
+      lu = env.getInput().peek();
+    } while (EXPR_SET.contains(lu.getType()));
+    while (!currStack.isEmpty()) {
+      rpnQueue.add(currStack.pop());
+    }
     return true;
   }
 
@@ -88,53 +95,60 @@ public class ExprNode extends Node {
     return s.substring(1, s.length() - 1);
   }
 
-  private void RPNize() throws Exception {
-    Deque<Object> stack = new ArrayDeque<>();
+  private boolean RPNize(Deque<Object> stack, boolean probUnary, LexicalUnit lu) throws Exception {
+    LexicalType lt = lu.getType();
 
-    while (true) {
-      LexicalUnit lu = env.getInput().peek();
-      LexicalType lt = lu.getType();
-      if (!EXPR_SET.contains(lt)) {
-        break;
-      }
-
-      if (lt == LexicalType.LP) {
-        stack.push(env.getInput().get().getType());
-        continue;
-      }
-
-      if (lt == LexicalType.RP) {
-        env.getInput().get();
-        while (stack.peek() != LexicalType.LP) {
-          rpnQueue.add(stack.pop());
-        }
-        stack.pop();
-        continue;
-      }
-
-      if (prededence.containsKey(lt)) {
-        while (!stack.isEmpty() && prededence.get(lt) <= prededence.get(stack.peek())) {
-          rpnQueue.add(stack.pop());
-        }
-        stack.push(env.getInput().get().getType());
-        continue;
-      }
-
-      if (VariableNode.isFirst(lu)) {
-        rpnQueue.add(VariableNode.getHandler(lt, env));
-        continue;
-      }
-
-      if (ConstNode.isFirst(lu)) {
-        rpnQueue.add(ConstNode.getHandler(lu, env));
-        continue;
-      }
-
-      throw new Exception("Invalid");
+    if (lt == LexicalType.LP) {
+      stack.push(env.getInput().get().getType());
+      return true;
     }
 
-    while (!stack.isEmpty()) {
-      rpnQueue.add(stack.pop());
+    if (lt == LexicalType.RP) {
+      env.getInput().get();
+      while (stack.peek() != LexicalType.LP) {
+        rpnQueue.add(stack.pop());
+      }
+      stack.pop();
+      return false;
     }
+
+    if (isUnary(probUnary, lt)) {
+      env.getInput().get();
+      switch (lt) {
+        case SUB:
+          LexicalUnit negative1 = new LexicalUnit(LexicalType.INTVAL, new ValueImpl(-1));
+          LexicalUnit mul = new LexicalUnit(LexicalType.MUL);
+          env.getInput().unget(mul);
+          env.getInput().unget(negative1);
+          break;
+        default:
+          throw new Exception("Invalid");
+      }
+      return true;
+    }
+
+    if (prededence.containsKey(lt)) {
+      while (!stack.isEmpty() && prededence.get(lt) <= prededence.get(stack.peek())) {
+        rpnQueue.add(stack.pop());
+      }
+      stack.push(env.getInput().get().getType());
+      return true;
+    }
+
+    if (VariableNode.isFirst(lu)) {
+      rpnQueue.add(VariableNode.getHandler(lt, env));
+      return false;
+    }
+
+    if (ConstNode.isFirst(lu)) {
+      rpnQueue.add(ConstNode.getHandler(lu, env));
+      return false;
+    }
+
+    throw new Exception("Invalid");
+  }
+
+  private static final boolean isUnary(boolean prob, LexicalType lt) {
+    return prob && UNARY_SET.contains(lt);
   }
 }
