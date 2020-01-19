@@ -1,13 +1,13 @@
 package newlang4;
 
-public class CallFuncNode extends Node {
+public class ForNode extends Node {
 
-  private CallFuncNode(Environment env) {
-    super(NodeType.FUNCTION_CALL, env);
+  private ForNode(Environment env) {
+    super(NodeType.FOR_STMT, env);
   }
 
   public static Node getHandler(Environment env) {
-    return null;
+    return new ForNode(env);
   }
 
   @Override

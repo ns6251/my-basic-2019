@@ -16,14 +16,16 @@ public class StmtNode extends Node {
   }
 
   public static Node getHandler(Environment env) throws Exception {
-    LexicalUnit lu = env.getInput().peek();
-    if (SubstNode.isFirst(lu)) {
-      return SubstNode.getHandler(env);
+    if (env.getInput().expect(LexicalType.NAME)) {
+      if (env.getInput().expect(2, LexicalType.EQ)) return SubstNode.getHandler(env);
+      if (env.getInput().expect(2, LexicalType.LP)) return CallFuncNode.getHandler(env);
+      throw new Exception("syntax exception");
     }
-    if (CallFuncNode.isFirst(lu)) {}
-    if (EndNode.isFirst(lu)) {
-      return EndNode.getHandler(env);
-    }
+
+    if (env.getInput().expect(LexicalType.FOR)) return ForNode.getHandler(env);
+
+    if (env.getInput().expect(LexicalType.END)) return EndNode.getHandler(env);
+
     throw new Exception("syntax exception");
   }
 

@@ -1,19 +1,11 @@
 package newlang4;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 public class SubstNode extends Node {
-  private static final Set<LexicalType> FIRST_SET = EnumSet.of(LexicalType.NAME);
   private Node leftver;
   private Node expr;
 
   private SubstNode(Environment env) {
     super(NodeType.ASSIGN_STMT, env);
-  }
-
-  public static boolean isFirst(LexicalUnit lu) {
-    return FIRST_SET.contains(lu.getType());
   }
 
   public static Node getHandler(Environment env) {
@@ -27,9 +19,11 @@ public class SubstNode extends Node {
       throw new Exception("Invalid token");
     }
     leftver = VariableNode.getHandler(lu.getType(), env);
+
     if (env.getInput().get().getType() != LexicalType.EQ) {
       throw new Exception("Syntax exception: Not found \"=\" token");
     }
+
     if (!ExprNode.isFirst(env.getInput().peek())) {
       throw new Exception(
           "Syntax exception: Right side of Assignment statment cannot evaluate as expression");
