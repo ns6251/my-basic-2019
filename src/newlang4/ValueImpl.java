@@ -30,11 +30,6 @@ public class ValueImpl extends Value {
   }
 
   @Override
-  public String get_sValue() {
-    return null;
-  }
-
-  @Override
   public String getSValue() {
     return this.val;
   }
