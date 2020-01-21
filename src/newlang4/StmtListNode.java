@@ -33,17 +33,19 @@ public class StmtListNode extends Node {
   public boolean parse() throws Exception {
     Node child;
     while (true) {
-      while (env.getInput().expect(LexicalType.NL)) env.getInput().get();
+      skipNL();
       LexicalUnit first = env.getInput().peek();
+      if (first.getType() == LexicalType.EOF) break;
       if (StmtNode.isFirst(first)) {
         child = StmtNode.getHandler(env);
         this.children.add(child);
         child.parse();
-        continue;
+      } else if (BlockNode.isFirst(first)) {
+      } else {
+        throw new Exception("Syntax exception");
       }
-      if (BlockNode.isFirst(first)) {}
-      return true;
     }
+    return true;
   }
 
   @Override
@@ -58,5 +60,9 @@ public class StmtListNode extends Node {
   @Override
   public Value getValue() throws Exception {
     return null;
+  }
+
+  private final void skipNL() throws Exception {
+    while (env.getInput().expect(LexicalType.NL)) env.getInput().get();
   }
 }
