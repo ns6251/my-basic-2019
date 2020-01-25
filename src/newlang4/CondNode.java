@@ -1,14 +1,37 @@
 package newlang4;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 public class CondNode extends Node {
-  Node body;
-  private static Set<LexicalType> firstSet =
-      EnumSet.of(LexicalType.NAME, LexicalType.INTVAL, LexicalType.DOUBLEVAL, LexicalType.BOOLVAL);
+  private Node leftExpr;
+  private Node rightExpr;
+  private LexicalType operator;
 
-  public static Node isMatch(Environment env, LexicalUnit first) {
-    return null;
+  private CondNode(Environment env) {
+    super(NodeType.IF_BLOCK, env);
+  }
+
+  public static boolean isFirst(LexicalUnit first) {
+    return ExprNode.isFirst(first);
+  }
+
+  public static Node getHandler(Environment env) {
+    return new CondNode(env);
+  }
+
+  @Override
+  public boolean parse() throws Exception {
+    // TODO 自動生成されたメソッド・スタブ
+    return super.parse();
+  }
+
+  @Override
+  public Value getValue() throws Exception {
+    // TODO 自動生成されたメソッド・スタブ
+    return super.getValue();
+  }
+
+  @Override
+  public String toString() {
+    // TODO 自動生成されたメソッド・スタブ
+    return super.toString();
   }
 }

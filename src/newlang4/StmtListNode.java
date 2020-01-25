@@ -31,19 +31,23 @@ public class StmtListNode extends Node {
 
   @Override
   public boolean parse() throws Exception {
-    Node child;
     while (true) {
       skipNL();
       LexicalUnit first = env.getInput().peek();
 
       if (StmtNode.isFirst(first)) {
-        child = StmtNode.getHandler(env);
+        Node child = StmtNode.getHandler(env);
         this.children.add(child);
         child.parse();
         continue;
       }
 
-      if (BlockNode.isFirst(first)) {}
+      if (BlockNode.isFirst(first)) {
+        Node child = BlockNode.getHandler(env);
+        this.children.add(child);
+        child.parse();
+        continue;
+      }
 
       return true;
     }
