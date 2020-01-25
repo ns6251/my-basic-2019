@@ -13,12 +13,20 @@ public class VariableNode extends Node {
     this.name = lu.getValue().getSValue();
   }
 
-  public static boolean isFirst(LexicalUnit first) {
-    return (first.getType() == LexicalType.NAME);
+  public static final boolean isFirst(LexicalUnit first) {
+    return isFirst(first.getType());
+  }
+
+  public static final boolean isFirst(LexicalType first) {
+    return first == LexicalType.NAME;
+  }
+
+  public static final Node getHandler(Environment env) throws Exception {
+    return getHandler(env.getInput().peek().getType(), env);
   }
 
   public static Node getHandler(LexicalType first, Environment my_env) throws Exception {
-    if (first != LexicalType.NAME) {
+    if (!isFirst(first)) {
       throw new Exception("Invalid error in variablenode");
     }
     LexicalUnit lu = my_env.getInput().get();

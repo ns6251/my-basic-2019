@@ -30,6 +30,10 @@ public class ConstNode extends Node {
     return FIRST_SET.contains(lu.getType());
   }
 
+  public static final Node getHandler(Environment env) throws Exception {
+    return getHandler(env.getInput().peek(), env);
+  }
+
   public static Node getHandler(LexicalUnit lu, Environment env) throws Exception {
     if (!isFirst(lu)) {
       throw new Exception("Invalid getHandler");

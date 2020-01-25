@@ -35,17 +35,18 @@ public class StmtListNode extends Node {
     while (true) {
       skipNL();
       LexicalUnit first = env.getInput().peek();
-      if (first.getType() == LexicalType.EOF) break;
+
       if (StmtNode.isFirst(first)) {
         child = StmtNode.getHandler(env);
         this.children.add(child);
         child.parse();
-      } else if (BlockNode.isFirst(first)) {
-      } else {
-        throw new Exception("Syntax exception");
+        continue;
       }
+
+      if (BlockNode.isFirst(first)) {}
+
+      return true;
     }
-    return true;
   }
 
   @Override

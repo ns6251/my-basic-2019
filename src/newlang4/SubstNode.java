@@ -12,6 +12,10 @@ public class SubstNode extends Node {
     return new SubstNode(env);
   }
 
+  public Node getLeftver() {
+    return leftver;
+  }
+
   @Override
   public boolean parse() throws Exception {
     LexicalUnit lu = env.getInput().peek();
