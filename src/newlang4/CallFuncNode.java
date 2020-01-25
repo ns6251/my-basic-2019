@@ -37,9 +37,8 @@ public class CallFuncNode extends Node {
     exprList = ExprListNode.getHandler(env);
     exprList.parse();
 
-    if (this.isFunc)
-      if (env.getInput().get().getType() != LexicalType.RP)
-        throw new Exception("expr_list has not closed by ')'");
+    if (this.isFunc && env.getInput().get().getType() != LexicalType.RP)
+      throw new Exception("expr_list has not closed by ')'");
 
     return true;
   }

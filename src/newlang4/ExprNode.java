@@ -73,15 +73,21 @@ public class ExprNode extends Node {
   public boolean parse() throws Exception {
     Deque<Object> currStack = new ArrayDeque<>();
     boolean probUnary = true;
+    int funcDepth = 0;
     LexicalUnit lu = env.getInput().peek();
     do {
+      funcDepth = calcFuncDepth(funcDepth, lu);
       probUnary = RPNize(currStack, probUnary, lu);
       lu = env.getInput().peek();
-    } while (EXPR_SET.contains(lu.getType()));
+    } while (EXPR_SET.contains(lu.getType()) && isInScope(funcDepth, lu));
     while (!currStack.isEmpty()) {
       rpnQueue.add(currStack.pop());
     }
     return true;
+  }
+
+  private static final boolean isInScope(int funcDepth, LexicalUnit lu) {
+    return funcDepth > 0 || lu.getType() != LexicalType.RP;
   }
 
   @Override
@@ -97,7 +103,6 @@ public class ExprNode extends Node {
 
   private boolean RPNize(Deque<Object> stack, boolean probUnary, LexicalUnit lu) throws Exception {
     LexicalType lt = lu.getType();
-
     if (lt == LexicalType.LP) {
       stack.push(env.getInput().get().getType());
       return true;
@@ -135,8 +140,14 @@ public class ExprNode extends Node {
       return true;
     }
 
-    if (VariableNode.isFirst(lu)) {
-      rpnQueue.add(VariableNode.getHandler(lt, env));
+    if (lt == LexicalType.NAME) {
+      if (env.getInput().expect(2, LexicalType.LP)) {
+        Node fn = CallFuncNode.getHandler(env);
+        fn.parse();
+        rpnQueue.add(fn);
+      } else {
+        rpnQueue.add(VariableNode.getHandler(lt, env));
+      }
       return false;
     }
 
@@ -150,5 +161,18 @@ public class ExprNode extends Node {
 
   private static final boolean isUnary(boolean prob, LexicalType lt) {
     return prob && UNARY_SET.contains(lt);
+  }
+
+  private static final int calcFuncDepth(int funcDepth, LexicalUnit lu) {
+    switch (lu.getType()) {
+      case LP:
+        funcDepth++;
+        break;
+      case RP:
+        funcDepth--;
+      default:
+        break;
+    }
+    return funcDepth;
   }
 }
