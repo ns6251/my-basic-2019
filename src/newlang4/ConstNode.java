@@ -5,7 +5,8 @@ import java.util.Set;
 
 public class ConstNode extends Node {
   private static final Set<LexicalType> FIRST_SET =
-      EnumSet.of(LexicalType.INTVAL, LexicalType.DOUBLEVAL, LexicalType.LITERAL);
+      EnumSet.of(
+          LexicalType.INTVAL, LexicalType.DOUBLEVAL, LexicalType.LITERAL, LexicalType.BOOLVAL);
   private Value value;
 
   private ConstNode(LexicalUnit lu, Environment env) throws Exception {
@@ -20,6 +21,9 @@ public class ConstNode extends Node {
         break;
       case LITERAL:
         this.type = NodeType.STRING_CONSTANT;
+        break;
+      case BOOLVAL:
+        this.type = NodeType.BOOL_CONSTANT;
         break;
       default:
         throw new Exception("Invalid");
