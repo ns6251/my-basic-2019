@@ -20,14 +20,14 @@ public class StmtNode extends Node {
       LexicalType lt = env.getInput().peek(2).getType();
       if (lt == LexicalType.EQ) return SubstNode.getHandler(env);
       if (ExprListNode.isFirst(lt)) return CallFuncNode.getHandler(env);
-      throw new Exception("syntax exception");
+      throw new SyntaxException();
     }
 
     if (env.getInput().expect(LexicalType.FOR)) return ForNode.getHandler(env);
 
     if (env.getInput().expect(LexicalType.END)) return EndNode.getHandler(env);
 
-    throw new Exception("syntax exception");
+    throw new SyntaxException();
   }
 
   @Override
