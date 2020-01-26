@@ -70,7 +70,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
   }
 
   @Override
-  public LexicalUnit get() throws IOException {
+  public LexicalUnit get() throws Exception {
     if (!ungetStack.isEmpty()) {
       return ungetStack.pop();
     }
@@ -81,20 +81,20 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     String target = String.valueOf((char) c);
     if (operator.containsKey(target)) {
       return getOperator(target);
-    } else if (target.matches("\"")) {
-      return getLiteral(target);
-    } else if (target.matches(REG_INTVAL)) {
-      return getNumber(target);
-    } else if (target.matches(REG_NAME)) {
-      return getName(target);
-    } else if (special.containsKey(target)) {
-      return getNewline(target);
-    } else {
-      System.err.println("字句解析エラー");
-      System.err.println("What is \"" + (char) c + "\" ?");
-      System.exit(1);
-      return null;
     }
+    if (target.matches("\"")) {
+      return getLiteral(target);
+    }
+    if (target.matches(REG_INTVAL)) {
+      return getNumber(target);
+    }
+    if (target.matches(REG_NAME)) {
+      return getName(target);
+    }
+    if (special.containsKey(target)) {
+      return getNewline(target);
+    }
+    throw new LexicalException("Invalid charactor of token's first");
   }
 
   public LexicalUnit peek() throws Exception {
@@ -151,7 +151,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
         break;
       }
     }
-    LexicalUnit lu = reserved.get(target);
+    LexicalUnit lu = reserved.get(target.toUpperCase());
     if (lu == null) {
       return new LexicalUnit(LexicalType.NAME, new ValueImpl(target));
     }
@@ -176,14 +176,12 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     }
   }
 
-  private LexicalUnit getLiteral(String target) throws IOException {
+  private LexicalUnit getLiteral(String target) throws Exception {
     while (true) {
       int next = reader.read();
       String n = String.valueOf((char) next);
       if (next == -1 || special.containsKey(n)) {
-        System.err.println("字句解析エラー: ... \"" + target + "\"");
-        System.err.println("\"で閉じられませんでした。");
-        System.exit(1);
+        throw new LexicalException("Literal does not closed by \"");
       }
       target += n;
       if (target.matches(REG_LITERAL)) {
