@@ -55,9 +55,9 @@ public class ForNode extends Node {
 
   @Override
   public String toString() {
-    String ret = "FOR " + init.toString() + " TO " + limit.toString() + " (\n";
+    String ret = "FOR (" + init.toString() + " TO " + limit.toString() + ") {\n";
     ret += stmts.toString();
-    ret += "\n)\n";
+    ret += "\n}";
     return ret;
   }
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 public class StmtListNode extends Node {
+  private int depth;
+  private static int instanceCount;
   private List<Node> children = new ArrayList<Node>();
   private static final Set<LexicalType> FIRST_SET =
       EnumSet.of(
@@ -19,6 +21,7 @@ public class StmtListNode extends Node {
 
   private StmtListNode(Environment env) {
     super(NodeType.STMT_LIST, env);
+    depth = ++StmtListNode.instanceCount;
   }
 
   public static boolean isFirst(LexicalUnit first) {
@@ -55,11 +58,11 @@ public class StmtListNode extends Node {
 
   @Override
   public String toString() {
-    String str = "stmt_list(\n";
+    String str = (depth == 1) ? "" : "(";
     for (Node child : children) {
-      str += child.toString() + ",\n";
+      str += child.toString() + (depth == 1 ? ";\n" : ", ");
     }
-    return str.substring(0, str.length() - 2) + "\n)";
+    return str.substring(0, str.length() - 2) + ((depth == 1) ? ";" : ")");
   }
 
   @Override

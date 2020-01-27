@@ -50,7 +50,7 @@ public class CallFuncNode extends Node {
 
   @Override
   public String toString() {
-    String ret = funcName + "(\n" + exprList.toString() + "\n)";
+    String ret = funcName + " (" + exprList.toString() + ")";
     return ret;
   }
 }

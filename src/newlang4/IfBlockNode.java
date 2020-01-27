@@ -123,12 +123,11 @@ public class IfBlockNode extends Node {
 
   @Override
   public String toString() {
-    String ret = "IF(";
+    String ret = "";
     for (NodePair np : queue) {
-      ret += "(" + np.cond.toString() + ") : (" + np.stmt.toString() + "), ";
+      ret += np.cond.toString() + " ? " + np.stmt.toString() + " : ";
     }
-    ret = ret.substring(0, ret.length() - 2);
-    ret += ") ENDIF";
+    ret = ret.substring(0, ret.length() - 3);
     return ret;
   }
 }

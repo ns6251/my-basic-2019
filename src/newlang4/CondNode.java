@@ -53,6 +53,6 @@ public class CondNode extends Node {
 
   @Override
   public String toString() {
-    return leftExpr.toString() + " " + operator.toString() + " " + rightExpr.toString();
+    return "[" + leftExpr.toString() + " " + operator.toString() + " " + rightExpr.toString() + "]";
   }
 }
