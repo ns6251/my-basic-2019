@@ -1,4 +1,4 @@
-package newlang4;
+package newlang5;
 
 import java.io.File;
 
@@ -7,7 +7,7 @@ public class Main {
   public static void main(String[] args) {
     String fname = (args.length > 0) ? args[0] : "sample.bas";
     // test
-    // fname = "interpreter-testPrograms/test20.bas";
+    // fname = "interpreter-testPrograms/FizzBuzz2.bas";
     try {
       File sourceFile = new File(fname);
       LexicalAnalyzer lex = new LexicalAnalyzerImpl(sourceFile);
@@ -16,9 +16,9 @@ public class Main {
       if (ProgramNode.isFirst(first)) {
         Node program = ProgramNode.getHandler(env);
         if (program != null && program.parse()) {
-          System.out.println(program.toString());
+          program.getValue();
         } else {
-          throw new Exception("Syntax error");
+          throw new SyntaxException();
         }
       }
     } catch (Exception e) {
