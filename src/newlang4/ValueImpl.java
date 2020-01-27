@@ -9,20 +9,24 @@ public class ValueImpl extends Value {
     this.type = t;
   }
 
-  public ValueImpl(boolean b) {}
+  public ValueImpl(boolean b) {
+    this.val = b + "";
+    this.type = ValueType.BOOL;
+  }
 
-  public ValueImpl(double d) {}
+  public ValueImpl(double d) {
+    this.val = d + "";
+    this.type = ValueType.DOUBLE;
+  }
 
-  public ValueImpl(int i) {}
+  public ValueImpl(int i) {
+    this.val = i + "";
+    this.type = ValueType.INTEGER;
+  }
 
   public ValueImpl(String s) {
     this.val = s;
     this.type = ValueType.STRING;
-  }
-
-  @Override
-  public String get_sValue() {
-    return null;
   }
 
   @Override
@@ -32,17 +36,17 @@ public class ValueImpl extends Value {
 
   @Override
   public int getIValue() {
-    return 0;
+    return Integer.parseInt(val);
   }
 
   @Override
   public double getDValue() {
-    return 0;
+    return Double.parseDouble(val);
   }
 
   @Override
   public boolean getBValue() {
-    return false;
+    return Boolean.parseBoolean(val);
   }
 
   @Override

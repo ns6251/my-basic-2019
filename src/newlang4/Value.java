@@ -1,7 +1,6 @@
 package newlang4;
 
 public abstract class Value {
-  public abstract String get_sValue();
 
   public abstract String getSValue();
 

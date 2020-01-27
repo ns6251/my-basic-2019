@@ -5,6 +5,8 @@ public interface LexicalAnalyzer {
 
   public boolean expect(LexicalType type) throws Exception;
 
+  public boolean expect(int ahead, LexicalType type) throws Exception;
+
   public void unget(LexicalUnit token) throws Exception;
 
   public LexicalUnit peek() throws Exception;

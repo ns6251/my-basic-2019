@@ -55,6 +55,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
     operator.put("(", new LexicalUnit(LexicalType.LP));
     operator.put(")", new LexicalUnit(LexicalType.RP));
     operator.put(",", new LexicalUnit(LexicalType.COMMA));
+    operator.put(String.valueOf((char) -1), new LexicalUnit(LexicalType.EOF));
     special.put("\n", new LexicalUnit(LexicalType.NL));
     special.put("\r", new LexicalUnit(LexicalType.NL));
     special.put("\r\n", new LexicalUnit(LexicalType.NL));
@@ -92,7 +93,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
   private LexicalUnit getNewline(String target) throws IOException {
     int next = reader.read();
     String n = String.valueOf((char) next);
-    if (special.get(target + n) == null && next != -1) {
+    if (special.get(target + n) == null) {
       reader.unread(next);
     }
     return new LexicalUnit(LexicalType.NL);
@@ -104,7 +105,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
       String n = String.valueOf((char) next);
       if ((target + n).matches(REG_NAME)) {
         target += n;
-      } else if (next != -1) {
+      } else {
         reader.unread(next);
         break;
       }
@@ -122,7 +123,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
       String n = String.valueOf((char) next);
       if ((target + n).matches(REG_NUMBER)) {
         target += n;
-      } else if (next != -1) {
+      } else {
         reader.unread(next);
         break;
       }
@@ -157,7 +158,7 @@ public class LexicalAnalyzerImpl implements LexicalAnalyzer {
       String n = String.valueOf((char) next);
       if (operator.containsKey(target + n)) {
         target += n;
-      } else if (next != -1) {
+      } else {
         reader.unread(next);
         return operator.get(target);
       }

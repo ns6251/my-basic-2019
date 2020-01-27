@@ -1,0 +1,3 @@
+[submodule "interpreter-testPrograms"]
+	path = interpreter-testPrograms
+	url = https://github.com/yamahubuki/interpreter-testPrograms.git

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 public class StmtListNode extends Node {
+  private int depth;
+  private static int instanceCount;
   private List<Node> children = new ArrayList<Node>();
   private static final Set<LexicalType> FIRST_SET =
       EnumSet.of(
@@ -19,6 +21,7 @@ public class StmtListNode extends Node {
 
   private StmtListNode(Environment env) {
     super(NodeType.STMT_LIST, env);
+    depth = ++StmtListNode.instanceCount;
   }
 
   public static boolean isFirst(LexicalUnit first) {
@@ -31,35 +34,43 @@ public class StmtListNode extends Node {
 
   @Override
   public boolean parse() throws Exception {
-    Node child;
     while (true) {
-      while (env.getInput().expect(LexicalType.NL)) {
-        env.getInput().get();
-      }
+      skipNL();
       LexicalUnit first = env.getInput().peek();
+
       if (StmtNode.isFirst(first)) {
-        child = StmtNode.getHandler(env);
+        Node child = StmtNode.getHandler(env);
         this.children.add(child);
-        if (!child.parse()) {
-          return false;
-        }
-      } else {
-        return true;
+        child.parse();
+        continue;
       }
+
+      if (BlockNode.isFirst(first)) {
+        Node child = BlockNode.getHandler(env);
+        this.children.add(child);
+        child.parse();
+        continue;
+      }
+
+      return true;
     }
   }
 
   @Override
   public String toString() {
-    String str = "stmt_list(";
+    String str = (depth == 1) ? "" : "(";
     for (Node child : children) {
-      str += child.toString() + ",";
+      str += child.toString() + (depth == 1 ? ";\n" : ", ");
     }
-    return str + ")";
+    return str.substring(0, str.length() - 2) + ((depth == 1) ? ";" : ")");
   }
 
   @Override
   public Value getValue() throws Exception {
     return null;
+  }
+
+  private final void skipNL() throws Exception {
+    while (env.getInput().expect(LexicalType.NL)) env.getInput().get();
   }
 }
