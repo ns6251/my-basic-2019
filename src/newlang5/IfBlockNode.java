@@ -7,11 +7,11 @@ public class IfBlockNode extends Node {
 
   private class NodePair {
     public final Node cond;
-    public final Node stmt;
+    public final Node stmtList;
 
     public NodePair(Node cond, Node stmt) {
       this.cond = cond;
-      this.stmt = stmt;
+      this.stmtList = stmt;
     }
   }
 
@@ -118,14 +118,21 @@ public class IfBlockNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    return super.getValue();
+    while (!queue.isEmpty()) {
+      NodePair pair = queue.remove();
+      if (pair.cond.getValue().getBValue()) {
+        pair.stmtList.getValue();
+        break;
+      }
+    }
+    return null;
   }
 
   @Override
   public String toString() {
     String ret = "";
     for (NodePair np : queue) {
-      ret += np.cond.toString() + " ? " + np.stmt.toString() + " : ";
+      ret += np.cond.toString() + " ? " + np.stmtList.toString() + " : ";
     }
     ret = ret.substring(0, ret.length() - 3);
     return ret;

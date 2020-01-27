@@ -45,7 +45,7 @@ public class CallFuncNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    return super.getValue();
+    return env.getFunction(funcName).eval((ExprListNode) exprList);
   }
 
   @Override

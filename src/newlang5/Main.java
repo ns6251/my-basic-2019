@@ -7,7 +7,7 @@ public class Main {
   public static void main(String[] args) {
     String fname = (args.length > 0) ? args[0] : "sample.bas";
     // test
-    fname = "interpreter-testPrograms/test01.bas";
+    // fname = "interpreter-testPrograms/FizzBuzz2.bas";
     try {
       File sourceFile = new File(fname);
       LexicalAnalyzer lex = new LexicalAnalyzerImpl(sourceFile);

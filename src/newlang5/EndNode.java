@@ -17,6 +17,7 @@ public class EndNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    return new ValueImpl("END", ValueType.STRING);
+    System.exit(0);
+    return null;
   }
 }

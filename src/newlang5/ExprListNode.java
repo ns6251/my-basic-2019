@@ -51,9 +51,16 @@ public class ExprListNode extends Node {
     }
   }
 
+  public final List<Node> getChildren() {
+    return this.children;
+  }
+
   @Override
   public Value getValue() throws Exception {
-    return super.getValue();
+    for (Node child : this.children) {
+      child.getValue();
+    }
+    return null;
   }
 
   @Override

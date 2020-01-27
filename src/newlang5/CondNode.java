@@ -47,8 +47,61 @@ public class CondNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    // TODO 自動生成されたメソッド・スタブ
-    return super.getValue();
+    Value lval = this.leftExpr.getValue();
+    Value rval = this.rightExpr.getValue();
+    ValueType lvt = lval.getType();
+    ValueType rvt = rval.getType();
+
+    boolean result = false;
+
+    if (lvt == ValueType.STRING || rvt == ValueType.STRING) {
+      switch (this.operator) {
+        case EQ:
+          result = lval.getSValue().equals(rval.getSValue());
+          break;
+        case NE:
+          result = !lval.getSValue().equals(rval.getSValue());
+          break;
+        default:
+          throw new RuntimeException();
+      }
+    } else if (lvt == ValueType.BOOL || rvt == ValueType.BOOL) {
+      if (lvt != rvt) throw new RuntimeException("cannot compare bool with number");
+      switch (this.operator) {
+        case EQ:
+          result = lval.getBValue() == rval.getBValue();
+          break;
+        case NE:
+          result = lval.getBValue() != rval.getBValue();
+          break;
+        default:
+          throw new RuntimeException("undefined: bool" + this.operator + "bool");
+      }
+    } else {
+      switch (this.operator) {
+        case EQ:
+          result = lval.getDValue() == rval.getDValue();
+          break;
+        case NE:
+          result = lval.getDValue() != rval.getDValue();
+          break;
+        case GT:
+          result = lval.getDValue() > rval.getDValue();
+          break;
+        case GE:
+          result = lval.getDValue() >= rval.getDValue();
+          break;
+        case LT:
+          result = lval.getDValue() < rval.getDValue();
+          break;
+        case LE:
+          result = lval.getDValue() <= rval.getDValue();
+          break;
+        default:
+          throw new RuntimeException();
+      }
+    }
+    return new ValueImpl(result);
   }
 
   @Override

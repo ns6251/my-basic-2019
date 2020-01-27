@@ -92,7 +92,64 @@ public class ExprNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    return super.getValue();
+    Deque<Value> stack = new ArrayDeque<>();
+
+    for (Object obj : rpnQueue) {
+      if (obj instanceof Node) {
+        stack.push(((Node) obj).getValue());
+        continue;
+      }
+
+      if (obj instanceof LexicalType) {
+        Value rval = stack.pop();
+        Value lval = stack.pop();
+        ValueType lvt = lval.getType();
+        ValueType rvt = rval.getType();
+        LexicalType op = (LexicalType) obj;
+
+        if (rvt == ValueType.BOOL || lvt == ValueType.BOOL)
+          throw new RuntimeException("undefined: bool " + op + " bool");
+
+        if (rvt == ValueType.STRING || lvt == ValueType.STRING) {
+          switch (op) {
+            case ADD:
+              stack.push(new ValueImpl(lval.getSValue() + rval.getSValue()));
+              break;
+            default:
+              throw new RuntimeException("undefined: string " + op + " string");
+          }
+          continue;
+        }
+
+        double result;
+        switch (op) {
+          case ADD:
+            result = lval.getDValue() + rval.getDValue();
+            break;
+          case SUB:
+            result = lval.getDValue() - rval.getDValue();
+            break;
+          case MUL:
+            result = lval.getDValue() * rval.getDValue();
+            break;
+          case DIV:
+            result = lval.getDValue() / rval.getDValue();
+            break;
+          default:
+            throw new RuntimeException();
+        }
+        if (lvt == ValueType.INTEGER && rvt == ValueType.INTEGER) {
+          stack.push(new ValueImpl((int) result));
+        } else {
+          stack.push(new ValueImpl(result));
+        }
+        continue;
+      }
+    }
+
+    if (stack.size() != 1) throw new RuntimeException("operater does missing in exprssion");
+
+    return stack.pop();
   }
 
   @Override

@@ -109,8 +109,17 @@ public class LoopBlockNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    // TODO 自動生成されたメソッド・スタブ
-    return super.getValue();
+    if (isCondFirst) {
+      while (cond.getValue().getBValue() != isUntil) {
+        stmtList.getValue();
+      }
+    } else {
+      do {
+        stmtList.getValue();
+      } while (cond.getValue().getBValue() != isUntil);
+    }
+
+    return null;
   }
 
   @Override

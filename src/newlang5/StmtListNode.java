@@ -21,7 +21,7 @@ public class StmtListNode extends Node {
 
   private StmtListNode(Environment env) {
     super(NodeType.STMT_LIST, env);
-    depth = ++StmtListNode.instanceCount;
+    depth = ++instanceCount;
   }
 
   public static boolean isFirst(LexicalUnit first) {
@@ -67,6 +67,9 @@ public class StmtListNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
+    for (Node child : children) {
+      child.getValue();
+    }
     return null;
   }
 

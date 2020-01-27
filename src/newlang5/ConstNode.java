@@ -50,7 +50,7 @@ public class ConstNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    return super.getValue();
+    return this.value;
   }
 
   @Override

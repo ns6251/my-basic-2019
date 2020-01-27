@@ -40,4 +40,11 @@ public class SubstNode extends Node {
   public String toString() {
     return (leftver.toString() + "[" + expr.toString() + "]");
   }
+
+  @Override
+  public Value getValue() throws Exception {
+    Value result = expr.getValue();
+    ((VariableNode) leftver).setValue(result);
+    return result;
+  }
 }

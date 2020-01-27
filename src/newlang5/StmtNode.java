@@ -19,7 +19,9 @@ public class StmtNode extends Node {
     if (env.getInput().expect(LexicalType.NAME)) {
       LexicalType lt = env.getInput().peek(2).getType();
       if (lt == LexicalType.EQ) return SubstNode.getHandler(env);
+
       if (ExprListNode.isFirst(lt)) return CallFuncNode.getHandler(env);
+
       throw new SyntaxException();
     }
 
