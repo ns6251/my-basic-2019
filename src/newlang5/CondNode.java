@@ -36,9 +36,11 @@ public class CondNode extends Node {
     leftExpr.parse();
 
     operator = env.getInput().get().getType();
-    if (!COMP_OP_SET.contains(operator)) throw new Exception("Syntax exception");
+    if (!COMP_OP_SET.contains(operator))
+      throw new SyntaxException("does not find a conditional operation");
 
-    if (!ExprNode.isFirst(env.getInput().peek())) throw new Exception("Invalid");
+    if (!ExprNode.isFirst(env.getInput().peek()))
+      throw new SyntaxException("does not find a right side of cond");
     rightExpr = ExprNode.getHandler(env);
     rightExpr.parse();
 
@@ -75,7 +77,7 @@ public class CondNode extends Node {
           result = lval.getBValue() != rval.getBValue();
           break;
         default:
-          throw new RuntimeException("undefined: bool" + this.operator + "bool");
+          throw new RuntimeException("undefined: bool " + this.operator + " bool");
       }
     } else {
       switch (this.operator) {
@@ -98,7 +100,7 @@ public class CondNode extends Node {
           result = lval.getDValue() <= rval.getDValue();
           break;
         default:
-          throw new RuntimeException();
+          throw new RuntimeException(this.operator + " is not compare operator");
       }
     }
     return new ValueImpl(result);

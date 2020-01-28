@@ -38,7 +38,8 @@ public class ExprListNode extends Node {
   @Override
   public boolean parse() throws Exception {
     while (true) {
-      if (!ExprNode.isFirst(env.getInput().peek())) throw new Exception("Internal exception");
+      if (!ExprNode.isFirst(env.getInput().peek()))
+        throw new SyntaxException("a expression is required");
       Node child = ExprNode.getHandler(env);
       child.parse();
       children.add(child);

@@ -33,12 +33,12 @@ public class CallFuncNode extends Node {
       this.isFunc = true;
     }
 
-    if (!ExprListNode.isFirst(env.getInput().peek())) throw new Exception("syntax exception");
+    if (!ExprListNode.isFirst(env.getInput().peek())) throw new SyntaxException("");
     exprList = ExprListNode.getHandler(env);
     exprList.parse();
 
     if (this.isFunc && env.getInput().get().getType() != LexicalType.RP)
-      throw new Exception("expr_list has not closed by ')'");
+      throw new SyntaxException("expr_list has not closed by ')'");
 
     return true;
   }
