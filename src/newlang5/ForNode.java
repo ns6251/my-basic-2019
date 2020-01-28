@@ -50,12 +50,17 @@ public class ForNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    int min = init.getValue().getIValue();
-    int max = limit.getValue().getIValue();
-    for (int i = min; i <= max; i++) {
+    for (init.getValue();
+        ctrlVar.getValue().getIValue() <= limit.getValue().getIValue();
+        updateCtrlVer()) {
       stmts.getValue();
     }
     return null;
+  }
+
+  private void updateCtrlVer() {
+    int i = ((VariableNode) ctrlVar).getValue().getIValue() + 1;
+    ((VariableNode) ctrlVar).setValue(new ValueImpl(i));
   }
 
   @Override
