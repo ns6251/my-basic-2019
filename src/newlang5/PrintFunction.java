@@ -12,7 +12,7 @@ public class PrintFunction extends Function {
       s += n.getValue().getSValue() + " ";
     }
     s = s.replace("\\n", "\n");
-    System.out.println(s.substring(0, s.length() - 1));
+    System.out.print(s.substring(0, s.length() - 1));
     return null;
   }
 }

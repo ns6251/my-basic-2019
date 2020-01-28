@@ -118,8 +118,7 @@ public class IfBlockNode extends Node {
 
   @Override
   public Value getValue() throws Exception {
-    while (!queue.isEmpty()) {
-      NodePair pair = queue.remove();
+    for (NodePair pair : queue) {
       if (pair.cond.getValue().getBValue()) {
         pair.stmtList.getValue();
         break;
